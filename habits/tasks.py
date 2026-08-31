@@ -24,5 +24,3 @@ def check_habits():
             )
             if habit.user.tg_chat_id:
                 send_telegram_message(habit.user.tg_chat_id, message)
-
-            print(message)
