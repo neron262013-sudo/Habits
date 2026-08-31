@@ -4,12 +4,14 @@ from rest_framework.viewsets import ModelViewSet
 
 from habits.models import Habit
 from habits.serializers import HabitSerializer
+from habits.paginations import CustomPagination
 from users.permissions import IsOwner
 
 
 class HabitViewSet(ModelViewSet):
     queryset = Habit.objects.all()
     serializer_class = HabitSerializer
+    pagination_class = CustomPagination
 
     def get_permissions(self):
         if self.action in ['update', 'partial_update', 'destroy']:
