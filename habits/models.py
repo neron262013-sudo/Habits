@@ -57,6 +57,10 @@ class Habit(models.Model):
         null=True,
         blank=True
     )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата создания",
+    )
 
     class Meta:
         verbose_name = "Привычка"
