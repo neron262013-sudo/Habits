@@ -17,7 +17,7 @@ class HabitSerializer(serializers.ModelSerializer):
                 "Нельзя одновременно указать вознаграждение и связанную привычку."
             )
 
-        if action_time > 120:
+        if action_time is not None and action_time > 120:
             raise serializers.ValidationError(
                 "Время выполнения не должно превышать 120 секунд."
             )
@@ -41,5 +41,16 @@ class HabitSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Habit
-        fields = "__all__"
+        fields = [
+            "id",
+            "place",
+            "time",
+            "action",
+            "periodicity",
+            "reward",
+            "action_time",
+            "public",
+            "is_pleasant",
+            "related_habit",
+        ]
 
