@@ -44,3 +44,7 @@ disallow_untyped_defs = true
 warn_return_any = true
 exclude = "venv"
 
+[tool.pytest.ini_options]
+python_files = ["tests.py", "test_*.py", "*_test.py"]
+DJANGO_SETTINGS_MODULE = "config.settings"
+

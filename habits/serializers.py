@@ -6,11 +6,18 @@ from habits.models import Habit
 class HabitSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
-        reward = attrs.get("reward")
-        related_habit = attrs.get("related_habit")
-        action_time = attrs.get("action_time")
-        is_pleasant = attrs.get("is_pleasant", False)
-        periodicity = attrs.get("periodicity", 1)
+        if self.instance:
+            reward = attrs.get("reward", self.instance.reward)
+            related_habit = attrs.get("related_habit", self.instance.related_habit)
+            action_time = attrs.get("action_time", self.instance.action_time)
+            is_pleasant = attrs.get("is_pleasant", self.instance.is_pleasant)
+            periodicity = attrs.get("periodicity", self.instance.periodicity)
+        else:
+            reward = attrs.get("reward")
+            related_habit = attrs.get("related_habit")
+            action_time = attrs.get("action_time")
+            is_pleasant = attrs.get("is_pleasant", False)
+            periodicity = attrs.get("periodicity", 1)
 
         if reward and related_habit:
             raise serializers.ValidationError(
