@@ -8,10 +8,12 @@ class User(AbstractUser):
         verbose_name="Почта",
         help_text="Введите адрес почты",
     )
-    tg_nick = models.CharField(max_length=50, blank=True, null=True, verbose_name='TG name',
-                               help_text='Укажите телеграм ник')
-    tg_chat_id = models.CharField(max_length=50, blank=True, null=True, verbose_name='Телеграмм chat-id',
-                               help_text='Укажите телеграмм chat-id')
+    tg_nick = models.CharField(
+        max_length=50, blank=True, null=True, verbose_name="TG name", help_text="Укажите телеграм ник"
+    )
+    tg_chat_id = models.CharField(
+        max_length=50, blank=True, null=True, verbose_name="Телеграмм chat-id", help_text="Укажите телеграмм chat-id"
+    )
 
     username = None
 

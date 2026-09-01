@@ -20,19 +20,13 @@ class HabitSerializer(serializers.ModelSerializer):
             periodicity = attrs.get("periodicity", 1)
 
         if reward and related_habit:
-            raise serializers.ValidationError(
-                "Нельзя одновременно указать вознаграждение и связанную привычку."
-            )
+            raise serializers.ValidationError("Нельзя одновременно указать вознаграждение и связанную привычку.")
 
         if action_time is not None and action_time > 120:
-            raise serializers.ValidationError(
-                "Время выполнения не должно превышать 120 секунд."
-            )
+            raise serializers.ValidationError("Время выполнения не должно превышать 120 секунд.")
 
         if related_habit and not related_habit.is_pleasant:
-            raise serializers.ValidationError(
-                "Связанная привычка должна быть приятной."
-            )
+            raise serializers.ValidationError("Связанная привычка должна быть приятной.")
 
         if is_pleasant and (reward or related_habit):
             raise serializers.ValidationError(
@@ -40,9 +34,7 @@ class HabitSerializer(serializers.ModelSerializer):
             )
 
         if periodicity > 7:
-            raise serializers.ValidationError(
-                "Привычка должна выполняться хотя бы один раз в 7 дней."
-            )
+            raise serializers.ValidationError("Привычка должна выполняться хотя бы один раз в 7 дней.")
 
         return attrs
 
@@ -60,4 +52,3 @@ class HabitSerializer(serializers.ModelSerializer):
             "is_pleasant",
             "related_habit",
         ]
-

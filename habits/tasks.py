@@ -19,8 +19,6 @@ def check_habits():
         days_passed = (today - habit.created_at.date()).days
 
         if days_passed % habit.periodicity == 0:
-            message = (
-                f"{habit.user}, пора выполнить: {habit.action}."
-            )
+            message = f"{habit.user}, пора выполнить: {habit.action}."
             if habit.user.tg_chat_id:
                 send_telegram_message(habit.user.tg_chat_id, message)

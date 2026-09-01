@@ -5,35 +5,18 @@ from users.models import User
 
 class Habit(models.Model):
     user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        verbose_name="Пользователь привычки",
-        help_text="Укажите пользователя привычки"
+        User, on_delete=models.CASCADE, verbose_name="Пользователь привычки", help_text="Укажите пользователя привычки"
     )
-    place = models.CharField(
-        max_length=100,
-        verbose_name="Место",
-        help_text="Укажите место"
-    )
-    time = models.TimeField(
-        verbose_name="Время начала",
-        help_text="Укажите когда будет выполняться привычка"
-    )
-    action = models.TextField(
-        verbose_name="Действие",
-        help_text="Укажите что представляет собой привычка"
-    )
+    place = models.CharField(max_length=100, verbose_name="Место", help_text="Укажите место")
+    time = models.TimeField(verbose_name="Время начала", help_text="Укажите когда будет выполняться привычка")
+    action = models.TextField(verbose_name="Действие", help_text="Укажите что представляет собой привычка")
     periodicity = models.PositiveIntegerField(
         default=1,
         verbose_name="Периодичность",
         help_text="Укажите периодичность привычки",
     )
     reward = models.CharField(
-        max_length=100,
-        verbose_name="Вознаграждение",
-        help_text="Укажите вознаграждение",
-        blank=True,
-        null=True
+        max_length=100, verbose_name="Вознаграждение", help_text="Укажите вознаграждение", blank=True, null=True
     )
     action_time = models.PositiveIntegerField(
         verbose_name="Время выполнения",
@@ -55,7 +38,7 @@ class Habit(models.Model):
         verbose_name="Связанная привычка",
         help_text="Укажите связанную привычку",
         null=True,
-        blank=True
+        blank=True,
     )
     created_at = models.DateTimeField(
         auto_now_add=True,

@@ -3,8 +3,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from habits.models import Habit
-from habits.serializers import HabitSerializer
 from habits.paginations import CustomPagination
+from habits.serializers import HabitSerializer
 from users.permissions import IsOwner
 
 
@@ -14,9 +14,9 @@ class HabitViewSet(ModelViewSet):
     pagination_class = CustomPagination
 
     def get_permissions(self):
-        if self.action in ['update', 'partial_update', 'destroy']:
+        if self.action in ["update", "partial_update", "destroy"]:
             self.permission_classes = [IsOwner]
-        elif self.action in ['retrieve', 'create', 'list']:
+        elif self.action in ["retrieve", "create", "list"]:
             self.permission_classes = [IsAuthenticated]
         return super().get_permissions()
 
