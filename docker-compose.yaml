@@ -1,0 +1,109 @@
+services:
+  migrate:
+    build: .
+    command: python manage.py migrate
+    volumes:
+      - .:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  web:
+    build: .
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    expose:
+      - "8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    depends_on:
+      - web
+    restart: unless-stopped
+
+
+  db:
+    image: postgres:18.0
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    environment:
+      POSTGRES_DB: ${NAME}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${PASSWORD}
+    env_file:
+      - .env
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${USER} -d ${NAME}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    expose:
+      - "5432"
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    expose:
+      - "6379"
+    restart: unless-stopped
+
+  celery:
+    build: .
+    command: celery -A config worker -l INFO
+    volumes:
+      - .:/app
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  celery-beat:
+    build: .
+    command: celery -A config beat -l INFO
+    volumes:
+      - .:/app
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  static_volume:
+  media_volume:
